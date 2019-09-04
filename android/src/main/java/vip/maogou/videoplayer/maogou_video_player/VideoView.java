@@ -127,6 +127,9 @@ public class VideoView implements PlatformView, MethodCallHandler {
         }).build(video);
 
 
+        System.out.println("1111111111111111111111111111111111");
+
+
         video.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,6 +137,7 @@ public class VideoView implements PlatformView, MethodCallHandler {
                 video.startWindowFullscreen(registrar.activity(), true, true);
             }
         });
+
 
         //解决拖动视频会弹回来,因为ijk的FFMPEG对关键帧问题。
         VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
