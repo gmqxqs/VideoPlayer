@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="vip.maogou.videoplayer.maogou_video_player_example"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!-- Flutter needs it to communicate with the running application
+         to allow setting breakpoints, to provide hot reload, etc.
+    -->
+    <application android:label="maogou_video_player_example" tools:replace="android:label" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+</manifest>

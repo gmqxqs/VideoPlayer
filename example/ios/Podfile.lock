@@ -1,0 +1,37 @@
+PODS:
+  - Flutter (1.0.0)
+  - maogou_video_player (0.0.1):
+    - Flutter
+    - ZFPlayer
+    - ZFPlayer/AVPlayer
+    - ZFPlayer/ControlView
+  - ZFPlayer (3.2.12):
+    - ZFPlayer/Core (= 3.2.12)
+  - ZFPlayer/AVPlayer (3.2.12):
+    - ZFPlayer/Core
+  - ZFPlayer/ControlView (3.2.12):
+    - ZFPlayer/Core
+  - ZFPlayer/Core (3.2.12)
+
+DEPENDENCIES:
+  - Flutter (from `.symlinks/flutter/ios`)
+  - maogou_video_player (from `.symlinks/plugins/maogou_video_player/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - ZFPlayer
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: ".symlinks/flutter/ios"
+  maogou_video_player:
+    :path: ".symlinks/plugins/maogou_video_player/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  maogou_video_player: d56ca0dc205a474ddcc914656504119544b75199
+  ZFPlayer: fdc92702cc611922182a951991dea78566da7605
+
+PODFILE CHECKSUM: aff02bfeed411c636180d6812254b2daeea14d09
+
+COCOAPODS: 1.6.1
