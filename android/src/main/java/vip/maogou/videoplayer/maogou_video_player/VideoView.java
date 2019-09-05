@@ -191,7 +191,7 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
 
 
        // video.setImageAdUrl("http://www.baidu.com/");
-      // video.setVideoAdUrl("http://xm.ganji.com/");
+       video.setVideoAdUrl("http://xm.ganji.com/");
         //设置暂停图片广告的跳转地址
       //  video.setPauseAdImageUrl("https://www.suning.com/");
       //  video.getMadImageView().setBackground(registrar.activity().getResources().getDrawable(R.drawable.vedio_stop_ad));
