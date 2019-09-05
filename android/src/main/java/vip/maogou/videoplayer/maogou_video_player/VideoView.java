@@ -127,7 +127,6 @@ public class VideoView implements PlatformView, MethodCallHandler {
         }).build(video);
 
 
-        System.out.println("1111111111111111111111111111111111");
 
 
         video.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
