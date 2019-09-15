@@ -56,6 +56,11 @@ android {
             ndk { abiFilters "armeabi-v7a", "x86" }
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    buildToolsVersion = '29.0.1'
 }
 
 flutter {

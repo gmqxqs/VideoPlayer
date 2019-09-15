@@ -12,7 +12,7 @@ buildscript {
            // url 'https://raw.githubusercontent.com/gmqxqs/GSYVIDEOPLAYER/master'
         //  url 'file://F://WorkSpace/myaar/repository/'
          //   url 'file://D://WorkSpace/myaar/repository/'
-            url 'file://F://WorkSpace/myaar/repository/'
+            url 'file://D://WorkSpace/myaar/repository/'
         }
     }
 
@@ -32,7 +32,7 @@ rootProject.allprojects {
          //   url 'https://raw.githubusercontent.com/gmqxqs/GSYVIDEOPLAYER/master'
           //  url 'file://F://WorkSpace/myaar/repository/'
           //  url 'file://D://WorkSpace/myaar/repository/'
-            url 'file://F://WorkSpace/myaar/repository/'
+            url 'file://D://WorkSpace/myaar/repository/'
         }
     }
 }

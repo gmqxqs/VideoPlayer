@@ -8,10 +8,12 @@ import io.flutter.plugin.common.MethodChannel;
 import static io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.platform.PlatformView;
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
+import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 //import com.shuyu.gsyvideoplayer.video.MySelfGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.MySelfGSYVideoPlayer;
@@ -95,7 +97,9 @@ public class VideoView implements PlatformView, MethodCallHandler {
         orientationUtils.setEnable(false);
 
         gsyVideoOption = new GSYVideoOptionBuilder();
-        gsyVideoOption.setUrl(url)
+       // gsyVideoOption.setUrl("https://letv.com-v-letv.com/20180802/7097_e793eb8c/index.m3u8")
+     //   gsyVideoOption.setUrl("https://api.maogou.vip/v1/video/share/35308?eid=282663")
+        gsyVideoOption.setUrl("static://storage/emulated/0/Android/data/com.example.gsyvideoplayer/files/d/1/62afc49f55985d7a550edc9f2864aa/d162afc49f55985d7a550edc9f2864aa/index.m3u8https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8")
                 .setCacheWithPlay(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
@@ -143,6 +147,7 @@ public class VideoView implements PlatformView, MethodCallHandler {
         List<VideoOptionModel> list = new ArrayList<>();
         list.add(videoOptionModel);
         GSYVideoManager.instance().setOptionModelList(list);
+        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
         video.startPlayLogic();
     }
 }
