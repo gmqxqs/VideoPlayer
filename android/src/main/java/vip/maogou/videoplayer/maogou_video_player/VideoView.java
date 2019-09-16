@@ -83,7 +83,7 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
     private ViewGroup oldVp;
     private View oldF;
     ArrayList<MySelfGSYVideoPlayer.GSYADVideoModel> urls = new ArrayList<>();
-    MySelfGSYVideoPlayer.TimeCount timeCount;
+  //  MySelfGSYVideoPlayer.TimeCount timeCount;
     int width;
     int height;
     int count = 0;
@@ -164,37 +164,97 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
 
 
     private void getMaogouVideo(String url, long seek) {
+        String configRoot = context.getExternalFilesDir(null).getPath();
+        System.out.println("configRoot:" + configRoot);
         mOrientationUtils = new OrientationUtils(registrar.activity(), video);
-        video.getBackButton().setVisibility(View.GONE);
-        video.setFullHideStatusBar(true);
-        video.setFullHideActionBar(true);
-        mOrientationUtils.setEnable(false);
-        timeCount = video.new TimeCount(10000,1000);
+       // video.getBackButton().setVisibility(View.GONE);
+        String tempUrl = "static://storage/emulated/0/Android/data/vip.maogou.videoplayer.maogou_video_player_example/files/d/1/62afc49f55985d7a550edc9f2864aa/d162afc49f55985d7a550edc9f2864aa/index.m3u8https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8";
+        //  String tempUrl = "https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8";
+        //  String tempUrl = "https://scontent-lga3-1.xx.fbcdn.net/v/t39.24130-6/10000000_194485571543767_1072296362069752098_n.mp4?_nc_cat=100&efg=eyJ2ZW5jb2RlX3RhZyI6Im9lcF9oZCJ9&_nc_oc=AQk0dFtDO98inb99mAaFjvRtWwPBRDPrIJIHT06Qw00mt_x9yRluXEFpgxuvE9XWZUA&_nc_ht=scontent-lga3-1.xx&oh=d051c96085dd5d01d64b1dcce0748d51&oe=5E080AFD";
+        ArrayList<String> listUrl = new ArrayList<String>();
+        listUrl = video.subString(tempUrl);
+        System.out.println("list:" + listUrl);
+        //     String url = "https://apd-1f573461e2849c2dff8de8011848088b.v.smtcdns.com/moviets.tc.qq.com/A-pfo_cZrdx-q2vFBqnpS4xcOM5Jb9Q8r8GgdIs8r8P0/uwMROfz2r5zAoaQXGdGnC2df644E7D3uP8M8pmtgwsRK9nEL/h3Ir07Asx9wg0_yDFrgKal0z4RSuVdCBIljI9eWOBAODkcEcQByGBAJMGF42Hkd48Gmf8rSFFPW5hh53XONL7LmdZpg9INujHPIJA-Y8gtK6W5P2XvMvBxKABOCWelv-mebHpqBSSTBUz6uDLGuHFhLeXt8dESEIn7_tnDs0CpU/z00310ev4nq.321002.ts.m3u8?ver=4";
+
         urls = video.getUrls();
-        //广告1
+        System.out.println("listUrl.size():" + listUrl.size());
         urls.add(new MySelfGSYVideoPlayer.GSYADVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4",
                 "", MySelfGSYVideoPlayer.GSYADVideoModel.TYPE_AD));
-        //正式内容1
-        urls.add(new MySelfGSYVideoPlayer.GSYADVideoModel("http://v1.bjssmd.net/20190715/yXfbhmdr/index.m3u8",
-                "测试视频", MySelfGSYVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
-        //video.setAdUp(urls, true, 0);
+        if(listUrl.size() >= 2){
+            urls.add(new MySelfGSYVideoPlayer.GSYADVideoModel(listUrl.get(0),
+                    "", MySelfGSYVideoPlayer.GSYADVideoModel.TYPE_DOWN));
+            urls.add(new MySelfGSYVideoPlayer.GSYADVideoModel(listUrl.get(1),
+                    "", MySelfGSYVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
+        } else{
+            urls.add(new MySelfGSYVideoPlayer.GSYADVideoModel(listUrl.get(0),
+                    "", MySelfGSYVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
+        }
+        video.setRotateViewAuto(false);
         video.setAutoFullWithSize(true);
         video.setShowFullAnimation(false);
-         parent = (ViewGroup) video.getParent();
-        //  videoPlayer.getSurface().setBackground(getResources().getDrawable(R.drawable.xxx1));
-        video.measure(0,0);
-        width = video.getMeasuredWidth(); ;
-        height = video.getLayoutParams().height;
+        video.setLooping(false);
+        video.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //直接横屏
+                //  orientationUtils.resolveByClick();
+                //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
+                video.startWindowFullscreen(registrar.activity(), true, true);
+            }
+        });
+        video.setIsTouchWiget(true);
+        video.setLooping(false);
+        video.getBackButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
-        video.setAutoFullWithSize(true);
-        video.setShowFullAnimation(false);
-
-
-       // video.setImageAdUrl("http://www.baidu.com/");
-       video.setVideoAdUrl("http://xm.ganji.com/");
+        //   videoPlayer.setImageAdUrl("http://www.baidu.com/");
+        video.setVideoAdUrl("http://xm.ganji.com/");
         //设置暂停图片广告的跳转地址
-      //  video.setPauseAdImageUrl("https://www.suning.com/");
-      //  video.getMadImageView().setBackground(registrar.activity().getResources().getDrawable(R.drawable.vedio_stop_ad));
+        video.setPauseAdImageUrl("https://www.suning.com/");
+        //点击暂停广告图片跳转
+        video.getMadImageView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(registrar.activity(), PauseImageAdWebViewActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                Bundle bundle = new Bundle();
+                bundle.putString("pauseImageAdUrl",video.getPauseAdImageUrl());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        //解决拖动视频会弹回来,因为ijk的FFMPEG对关键帧问题。
+        VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
+        List<VideoOptionModel> list = new ArrayList<>();
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "buffer_size", 1316);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "analyzemaxduration", 100);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "probesize", 10240);
+        list.add(videoOptionModel);
+        videoOptionModel =
+                new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1);
+        list.add(videoOptionModel);
+        videoOptionModel =
+                new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 50);
+        list.add(videoOptionModel);
+        videoOptionModel =
+                new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"reconnect",5);
+        list.add(videoOptionModel);
+
+        GSYVideoManager.instance().setOptionModelList(list);
+        GSYVideoManager.instance().setTimeOut(4000, true);
+        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
+        System.out.println("urls:" + urls);
+        video.setAdUp(urls,true,0);
+        //   videoPlayer.setUp("http://v1.bjssmd.net/20190715/yXfbhmdr/index.m3u8",true,null,"");
+        //   videoPlayer.startPlayLogic();
  ;
         video.getMadImageView().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,51 +312,11 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
                 if (GSYVideoManager.backFromWindowFull(registrar.activity())) {
                     return;
                 }
-
-                if(video.isIfCurrentIsFullscreen()){
-
-                    if(video.isImageAd){
-                        System.out.println("退出");
-                        video.getLockScreen().setVisibility(View.GONE);
-                        video.getControllerbottom().setVisibility(View.GONE);
-                        video.getPlaystart().setVisibility(View.VISIBLE);
-                        video.getCurrentTimeTextView().setVisibility(View.VISIBLE);
-                        video.getTotalTimeTextView().setVisibility(View.VISIBLE);
-                        video.getFullscreenButton().setVisibility(View.VISIBLE);
-
-                        //backWindow(video);
-                      //  mOrientationUtils.backToProtVideo();
-                        //mOrientationUtils.resolveByClick();
-                      //  backWindow(video);
-                      //  backWindow(video);
-                      //  video.clearFullscreenLayout();
-                        return;
-                    }
-
-                } else{
-                    if(timeCount != null){
-                        timeCount.cancel();
-                    }
-                }
-               // registrar.activity().onBackPressed();
+                registrar.activity().onBackPressed();
                 // videoPlayer.getMadImageView().setLayoutParams(new RelativeLayout.LayoutParams(150,118));
             }
         });
-        video.getAdimage_skip().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timeCount.onFinish();
-                timeCount.cancel();
-            }
-        });
 
-        //解决拖动视频会弹回来,因为ijk的FFMPEG对关键帧问题。
-        VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
-        List<VideoOptionModel> list = new ArrayList<>();
-        list.add(videoOptionModel);
-
-        GSYVideoManager.instance().setOptionModelList(list);
-        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
     //    video.startPlayLogic();
         startPlay();
     }
@@ -423,103 +443,42 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
    }
 
 
-    public void startPlay() {
+    public void startPlay(){
         //暂停广告，片头视频广告，片头图片广告的连接地址都为空
-        if (TextUtils.isEmpty(video.getImageAdUrl()) && TextUtils.isEmpty(video.getVideoAdUrl()) && TextUtils.isEmpty(video.getPauseAdImageUrl())) {
-            if (urls.size() >= 2) {
+        if(TextUtils.isEmpty(video.getVideoAdUrl()) && TextUtils.isEmpty(video.getPauseAdImageUrl())){
+            if(urls.size() >= 2){
                 urls.remove(urls.get(0));
             }
             video.setAdUp(urls, true, 0);
             video.startPlayLogic();
         }
         //片头视频广告，片头图片广告的连接地址都为空 ,暂停广告的连接地址不为空
-        if (TextUtils.isEmpty(video.getImageAdUrl()) && TextUtils.isEmpty(video.getVideoAdUrl()) && !TextUtils.isEmpty(video.getPauseAdImageUrl())) {
+        if(TextUtils.isEmpty(video.getVideoAdUrl()) && !TextUtils.isEmpty(video.getPauseAdImageUrl())){
             setPauseImage();
-            if (urls.size() >= 2) {
+            if(urls.size() >= 2){
                 urls.remove(urls.get(0));
             }
             video.setAdUp(urls, true, 0);
             video.startPlayLogic();
         }
-        //暂停广告，片头图片广告的连接地址都为wf空 ,片头视频广告的连接地址不为空
-        if (TextUtils.isEmpty(video.getImageAdUrl()) && !TextUtils.isEmpty(video.getVideoAdUrl()) && TextUtils.isEmpty(video.getPauseAdImageUrl())) {
+        //暂停广告，片头图片广告的连接地址都为空 ,片头视频广告的连接地址不为空
+        if( !TextUtils.isEmpty(video.getVideoAdUrl()) && TextUtils.isEmpty(video.getPauseAdImageUrl())){
             video.setAdUp(urls, true, 0);
             video.startPlayLogic();
         }
 
-        //暂停广告，片头视频广告的连接地址都为空 ,片头图片广告的连接地址不为空
-        if (!TextUtils.isEmpty(video.getImageAdUrl()) && TextUtils.isEmpty(video.getVideoAdUrl()) && TextUtils.isEmpty(video.getPauseAdImageUrl())) {
-            if (urls.size() >= 2) {
-                urls.remove(urls.get(0));
-            }
-            setImageAd();
-            timeCount.start();
-        }
 
         //暂停广告，片头视频广告的连接地址都不为空 ,片头图片广告的连接地址为空
-        if (TextUtils.isEmpty(video.getImageAdUrl()) && !TextUtils.isEmpty(video.getVideoAdUrl()) && !TextUtils.isEmpty(video.getPauseAdImageUrl())) {
+        if(!TextUtils.isEmpty(video.getVideoAdUrl()) && !TextUtils.isEmpty(video.getPauseAdImageUrl())){
             setPauseImage();
             video.setAdUp(urls, true, 0);
             video.startPlayLogic();
         }
 
-        //暂停广告,片头图片广告的连接地址为不空，片头视频广告的连接地址为空
-        if (!TextUtils.isEmpty(video.getImageAdUrl()) && TextUtils.isEmpty(video.getVideoAdUrl()) && !TextUtils.isEmpty(video.getPauseAdImageUrl())) {
-            setPauseImage();
-            if (urls.size() >= 2) {
-                urls.remove(urls.get(0));
-            }
-            setImageAd();
-            timeCount.start();
-        }
-
-        //片头图片广告，片头视频广告的连接地址不为空，暂停广告的连接地址为空
-        if (!TextUtils.isEmpty(video.getImageAdUrl()) && !TextUtils.isEmpty(video.getVideoAdUrl()) && TextUtils.isEmpty(video.getPauseAdImageUrl())) {
-
-            Random random = new Random();
-            int result = random.nextInt(10);
-            result += 1;
-            if (result % 2 == 0) {
-                setImageAd();
-                if (urls.size() >= 2) {
-                    urls.remove(urls.get(0));
-                }
-                video.isImageAd = true;
-              //  video.setBackground(getResources().getDrawable(com.shuyu.gsyvideoplayer.R.drawable.xxx1));
-                timeCount.start();
-                // videoPlayer.setAdUp(urls, true, 0);
-            } else {
-                video.getSurface().setBackgroundColor(Color.BLACK);
-                video.isImageAd = false;
-                video.setAdUp(urls, true, 0);
-                video.startPlayLogic();
-            }
-        }
 
 
-        //片头图片广告，片头视频广告,暂停广告的连接地址不为空
-        if (!TextUtils.isEmpty(video.getImageAdUrl()) && !TextUtils.isEmpty(video.getVideoAdUrl()) && !TextUtils.isEmpty(video.getPauseAdImageUrl())) {
-            setPauseImage();
-            Random random = new Random();
-            int result = random.nextInt(10);
-            result += 1;
-            if (result % 2 == 0) {
-                setImageAd();
-                if (urls.size() >= 2) {
-                    urls.remove(urls.get(0));
-                }
-                video.isImageAd = true;
-               // video.setBackground(registrar.activity().getResources().getDrawable(com.shuyu.gsyvideoplayer.R.drawable.xxx1));
-                timeCount.start();
-                // videoPlayer.setAdUp(urls, true, 0);
 
-            } else {
-                video.getSurface().setBackgroundColor(Color.BLACK);
-                video.isImageAd = false;
-                video.setAdUp(urls, true, 0);
-                video.startPlayLogic();
-            }
-        }
+
 
     }
 
