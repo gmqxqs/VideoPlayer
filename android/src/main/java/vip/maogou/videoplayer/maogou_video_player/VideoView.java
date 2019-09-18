@@ -2,33 +2,12 @@ package vip.maogou.videoplayer.maogou_video_player;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import android.widget.ImageView;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import static io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -62,19 +41,16 @@ import com.shuyu.gsyvideoplayer.video.MySelfGSYVideoPlayer;
 
 import com.shuyu.gsyvideoplayer.video.NormalGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.PauseImageAdWebViewActivity;
-import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.PortraitGSYVideoPlayer;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
+
 
 public class VideoView  extends Activity implements PlatformView, MethodCallHandler  {
     // private NormalGSYVideoPlayer video;
-    private LandscapeGSYVideoPlayer video;
+    private PortraitGSYVideoPlayer video;
     private OrientationUtils mOrientationUtils;
     private GSYVideoOptionBuilder gsyVideoOption;
     private final MethodChannel methodChannel;
@@ -83,14 +59,14 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
     private Context context;
     private ViewGroup oldVp;
     private View oldF;
-    ArrayList<LandscapeGSYVideoPlayer.GSYADVideoModel> urls = new ArrayList<>();
+    ArrayList<PortraitGSYVideoPlayer.GSYADVideoModel> urls = new ArrayList<>();
     public ArrayList<Integer> imageUrls = new ArrayList<>();
     VideoView(Context context, int viewId, Object args, Registrar registrar) {
         System.out.println("初始化:");
         this.context = context;
         this.registrar = registrar;
 
-        video = (LandscapeGSYVideoPlayer) LayoutInflater.from(registrar.activity()).inflate(R.layout.jz_video, null);
+        video = (PortraitGSYVideoPlayer) LayoutInflater.from(registrar.activity()).inflate(R.layout.jz_video, null);
        // video = (NormalGSYVideoPlayer) LayoutInflater.from(registrar.activity()).inflate(R.layout.jz_video, null);
         webView = new WebView(registrar.activity());
         oldVp = video.getViewGroup();
@@ -179,10 +155,10 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
         //     String url = "https://apd-1f573461e2849c2dff8de8011848088b.v.smtcdns.com/moviets.tc.qq.com/A-pfo_cZrdx-q2vFBqnpS4xcOM5Jb9Q8r8GgdIs8r8P0/uwMROfz2r5zAoaQXGdGnC2df644E7D3uP8M8pmtgwsRK9nEL/h3Ir07Asx9wg0_yDFrgKal0z4RSuVdCBIljI9eWOBAODkcEcQByGBAJMGF42Hkd48Gmf8rSFFPW5hh53XONL7LmdZpg9INujHPIJA-Y8gtK6W5P2XvMvBxKABOCWelv-mebHpqBSSTBUz6uDLGuHFhLeXt8dESEIn7_tnDs0CpU/z00310ev4nq.321002.ts.m3u8?ver=4";
 
         urls = video.getUrls();
-        urls.add(new LandscapeGSYVideoPlayer.GSYADVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4",
-                "",  LandscapeGSYVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
-        urls.add(new LandscapeGSYVideoPlayer.GSYADVideoModel("https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8",
-                "",  LandscapeGSYVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
+        urls.add(new PortraitGSYVideoPlayer.GSYADVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4",
+                "",  PortraitGSYVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
+        urls.add(new PortraitGSYVideoPlayer.GSYADVideoModel("https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8",
+                "",  PortraitGSYVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
         video.setImageUrls(imageUrls);
         video.setRotateViewAuto(false);
         video.setAutoFullWithSize(true);
@@ -240,13 +216,15 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
             @Override
             public void onClick(View v) {
                 //  videoPlayer.changeAdUIState();
-                System.out.println("点击返回");
                 if (mOrientationUtils != null) {
                     mOrientationUtils.backToProtVideo();
                 }
+
                 if (GSYVideoManager.backFromWindowFull(registrar.activity())) {
+
                     return;
                 }
+
                 registrar.activity().onBackPressed();
                 // videoPlayer.getMadImageView().setLayoutParams(new RelativeLayout.LayoutParams(150,118));
             }
