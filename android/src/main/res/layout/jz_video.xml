@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.shuyu.gsyvideoplayer.video.MySelfGSYVideoPlayer
+<com.shuyu.gsyvideoplayer.video.LandscapeGSYVideoPlayer
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/jz_video"
     android:layout_gravity="center"
