@@ -9,10 +9,7 @@ buildscript {
         //    url 'file:///Users/soone/Downloads'
         //}
         maven{
-           // url 'https://raw.githubusercontent.com/gmqxqs/GSYVIDEOPLAYER/master'
-        //  url 'file://F://WorkSpace/myaar/repository/'
-         //   url 'file://D://WorkSpace/myaar/repository/'
-            url 'file://D://WorkSpace/myaar/repository/'
+            url 'file://E://WorkSpace/myaar/repository/'
         }
     }
 
@@ -29,10 +26,7 @@ rootProject.allprojects {
         //    url 'file:///Users/soone/Downloads'
         //}
         maven{
-         //   url 'https://raw.githubusercontent.com/gmqxqs/GSYVIDEOPLAYER/master'
-          //  url 'file://F://WorkSpace/myaar/repository/'
-          //  url 'file://D://WorkSpace/myaar/repository/'
-            url 'file://D://WorkSpace/myaar/repository/'
+            url 'file://E://WorkSpace/myaar/repository/'
         }
     }
 }

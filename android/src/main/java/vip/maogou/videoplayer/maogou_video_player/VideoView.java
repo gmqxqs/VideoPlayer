@@ -13,7 +13,9 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 //import com.shuyu.gsyvideoplayer.video.MySelfGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.MySelfGSYVideoPlayer;
@@ -32,7 +34,7 @@ public class VideoView implements PlatformView, MethodCallHandler {
     private GSYVideoOptionBuilder gsyVideoOption;
     private final MethodChannel methodChannel;
     private final Registrar registrar;
-
+    public ArrayList<MySelfGSYVideoPlayer.GSYADVideoModel> urls = new ArrayList<>();
     VideoView(Context context, int viewId, Object args, Registrar registrar) {
         this.registrar = registrar;
         video = (MySelfGSYVideoPlayer) LayoutInflater.from(registrar.activity()).inflate(R.layout.jz_video, null);
@@ -91,15 +93,45 @@ public class VideoView implements PlatformView, MethodCallHandler {
         orientationUtils = new OrientationUtils(registrar.activity(), video);
 
         video.getBackButton().setVisibility(View.GONE);
+        video.getBackButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (orientationUtils != null) {
+                    orientationUtils.setEnable(false);
+                    orientationUtils.backToProtVideo();
+                }
+            }
+        });
         video.setFullHideStatusBar(true);
         video.setFullHideActionBar(true);
 
         orientationUtils.setEnable(false);
 
-        gsyVideoOption = new GSYVideoOptionBuilder();
+        String tempUrl = "https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8";
+        ArrayList<String> listUrl = new ArrayList<String>();
+        listUrl = video.subString(tempUrl);
+        System.out.println("list:" + listUrl);
+        //     String url = "https://apd-1f573461e2849c2dff8de8011848088b.v.smtcdns.com/moviets.tc.qq.com/A-pfo_cZrdx-q2vFBqnpS4xcOM5Jb9Q8r8GgdIs8r8P0/uwMROfz2r5zAoaQXGdGnC2df644E7D3uP8M8pmtgwsRK9nEL/h3Ir07Asx9wg0_yDFrgKal0z4RSuVdCBIljI9eWOBAODkcEcQByGBAJMGF42Hkd48Gmf8rSFFPW5hh53XONL7LmdZpg9INujHPIJA-Y8gtK6W5P2XvMvBxKABOCWelv-mebHpqBSSTBUz6uDLGuHFhLeXt8dESEIn7_tnDs0CpU/z00310ev4nq.321002.ts.m3u8?ver=4";
+
+        urls = video.getUrls();
+        System.out.println("listUrl.size():" + listUrl.size());
+        if(listUrl.size() >= 2){
+            urls.add(new MySelfGSYVideoPlayer.GSYADVideoModel(listUrl.get(0),
+                    "", MySelfGSYVideoPlayer.GSYADVideoModel.TYPE_DOWN));
+            urls.add(new MySelfGSYVideoPlayer.GSYADVideoModel(listUrl.get(1),
+                    "", MySelfGSYVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
+        } else{
+            urls.add(new MySelfGSYVideoPlayer.GSYADVideoModel(listUrl.get(0),
+                    "", MySelfGSYVideoPlayer.GSYADVideoModel.TYPE_NORMAL));
+        }
+
+
+  /*      gsyVideoOption = new GSYVideoOptionBuilder();
        // gsyVideoOption.setUrl("https://letv.com-v-letv.com/20180802/7097_e793eb8c/index.m3u8")
      //   gsyVideoOption.setUrl("https://api.maogou.vip/v1/video/share/35308?eid=282663")
-        gsyVideoOption.setUrl("static://storage/emulated/0/Android/data/com.example.gsyvideoplayer/files/d/1/62afc49f55985d7a550edc9f2864aa/d162afc49f55985d7a550edc9f2864aa/index.m3u8https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8")
+        //外部辅助的旋转，帮助全屏
+        String temp = "static://storage/emulated/0/Android/data/com.example.gsyvideoplayer/files/d/1/62afc49f55985d7a550edc9f2864aa/d162afc49f55985d7a550edc9f2864aa/index.m3u8https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8";
+        gsyVideoOption.setUrl("https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8")
                 .setCacheWithPlay(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
@@ -128,7 +160,7 @@ public class VideoView implements PlatformView, MethodCallHandler {
                     orientationUtils.setEnable(!lock);
                 }
             }
-        }).build(video);
+        }).build(video);*/
 
 
 
@@ -141,13 +173,63 @@ public class VideoView implements PlatformView, MethodCallHandler {
             }
         });
 
-
         //解决拖动视频会弹回来,因为ijk的FFMPEG对关键帧问题。
-        VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
+        VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"enable-accurate-seek", 1);
         List<VideoOptionModel> list = new ArrayList<>();
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "allowed_media_types", "video"); //根据媒体类型来配置
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "timeout", 20000);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "buffer_size", 1316);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "infbuf", 1);  // 无限读
+        list.add(videoOptionModel);
+
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "rtsp_transport", "tcp");  // 无限读
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "rtsp_flags", "prefer_tcp");  // 无限读
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"mediacodec",1);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"start-on-prepared",0);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"http-detect-range-support",0);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_CODEC,"skip_loop_filter",48);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_CODEC,"skip_loop_filter",8);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"analyzemaxduration",100);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"analyzemaxduration",1);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"probesize",4096);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"flush_packets",1);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"packet-buffering",0);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"framedrop",1);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"opensles",0);
+        list.add(videoOptionModel);
+        videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"overlay-format",IjkMediaPlayer.SDL_FCC_RV32);
         list.add(videoOptionModel);
         GSYVideoManager.instance().setOptionModelList(list);
         PlayerFactory.setPlayManager(Exo2PlayerManager.class);
+        //   CacheFactory.setCacheManager(ExoPlayerCacheManager.class);
+        GSYVideoManager.onResume(false);
+        //    GSYVideoType.setRenderType(GSYVideoType.SUFRACE);
+        //    GSYVideoType.setRenderType(GSYVideoType.GLSURFACE);
+        GSYVideoType.setRenderType(GSYVideoType.TEXTURE);
+        IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);
+
+        // GSYVideoType.enableMediaCodec();
+        //GSYVideoType.enableMediaCodecTexture();
+
+        //   IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_ERROR);
+        video.setAdUp(urls,true,0);
         video.startPlayLogic();
     }
 }
