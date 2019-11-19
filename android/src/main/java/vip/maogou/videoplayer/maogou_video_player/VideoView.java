@@ -170,7 +170,7 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
        // video.getBackButton().setVisibility(View.GONE);
         //String tempUrl = "static://storage/emulated/0/Android/data/vip.maogou.videoplayer.maogou_video_player_example/files/d/1/62afc49f55985d7a550edc9f2864aa/d162afc49f55985d7a550edc9f2864aa/index.m3u8https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8";
        // String tempUrl = "https://iqiyi.com-l-iqiyi.com/20190823/22550_41c5b03c/index.m3u8";
-        String tempUrl = "https://iqiyi.com-l-iqiyi.com/20190303/21817_a6cd96be/index.m3u8";
+        String tempUrl = "https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8";
         //  String tempUrl = "https://scontent-lga3-1.xx.fbcdn.net/v/t39.24130-6/10000000_194485571543767_1072296362069752098_n.mp4?_nc_cat=100&efg=eyJ2ZW5jb2RlX3RhZyI6Im9lcF9oZCJ9&_nc_oc=AQk0dFtDO98inb99mAaFjvRtWwPBRDPrIJIHT06Qw00mt_x9yRluXEFpgxuvE9XWZUA&_nc_ht=scontent-lga3-1.xx&oh=d051c96085dd5d01d64b1dcce0748d51&oe=5E080AFD";
         ArrayList<String> listUrl = new ArrayList<String>();
         listUrl = subString(tempUrl);
@@ -207,6 +207,12 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
         video.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mOrientationUtils != null) {
+                    mOrientationUtils.backToProtVideo();
+                }
+                if (GSYVideoManager.backFromWindowFull(registrar.activity())) {
+                    return;
+                }
                 onBackPressed();
             }
         });
