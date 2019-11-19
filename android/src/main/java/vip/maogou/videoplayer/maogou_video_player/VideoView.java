@@ -63,6 +63,7 @@ import com.shuyu.gsyvideoplayer.video.PauseImageAdWebViewActivity;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +74,6 @@ import java.util.Random;
 public class VideoView  extends Activity implements PlatformView, MethodCallHandler  {
     // private NormalGSYVideoPlayer video;
     private MySelfGSYVideoPlayer video;
-
     private OrientationUtils mOrientationUtils;
     private GSYVideoOptionBuilder gsyVideoOption;
     private final MethodChannel methodChannel;
@@ -168,14 +168,14 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
         System.out.println("configRoot:" + configRoot);
         mOrientationUtils = new OrientationUtils(registrar.activity(), video);
        // video.getBackButton().setVisibility(View.GONE);
-        String tempUrl = "static://storage/emulated/0/Android/data/vip.maogou.videoplayer.maogou_video_player_example/files/d/1/62afc49f55985d7a550edc9f2864aa/d162afc49f55985d7a550edc9f2864aa/index.m3u8https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8";
-        //  String tempUrl = "https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8";
+        //String tempUrl = "static://storage/emulated/0/Android/data/vip.maogou.videoplayer.maogou_video_player_example/files/d/1/62afc49f55985d7a550edc9f2864aa/d162afc49f55985d7a550edc9f2864aa/index.m3u8https://youku.com-ok-pptv.com/20190901/6570_497d32b7/index.m3u8";
+       // String tempUrl = "https://iqiyi.com-l-iqiyi.com/20190823/22550_41c5b03c/index.m3u8";
+        String tempUrl = "https://iqiyi.com-l-iqiyi.com/20190303/21817_a6cd96be/index.m3u8";
         //  String tempUrl = "https://scontent-lga3-1.xx.fbcdn.net/v/t39.24130-6/10000000_194485571543767_1072296362069752098_n.mp4?_nc_cat=100&efg=eyJ2ZW5jb2RlX3RhZyI6Im9lcF9oZCJ9&_nc_oc=AQk0dFtDO98inb99mAaFjvRtWwPBRDPrIJIHT06Qw00mt_x9yRluXEFpgxuvE9XWZUA&_nc_ht=scontent-lga3-1.xx&oh=d051c96085dd5d01d64b1dcce0748d51&oe=5E080AFD";
         ArrayList<String> listUrl = new ArrayList<String>();
-        listUrl = video.subString(tempUrl);
+        listUrl = subString(tempUrl);
         System.out.println("list:" + listUrl);
         //     String url = "https://apd-1f573461e2849c2dff8de8011848088b.v.smtcdns.com/moviets.tc.qq.com/A-pfo_cZrdx-q2vFBqnpS4xcOM5Jb9Q8r8GgdIs8r8P0/uwMROfz2r5zAoaQXGdGnC2df644E7D3uP8M8pmtgwsRK9nEL/h3Ir07Asx9wg0_yDFrgKal0z4RSuVdCBIljI9eWOBAODkcEcQByGBAJMGF42Hkd48Gmf8rSFFPW5hh53XONL7LmdZpg9INujHPIJA-Y8gtK6W5P2XvMvBxKABOCWelv-mebHpqBSSTBUz6uDLGuHFhLeXt8dESEIn7_tnDs0CpU/z00310ev4nq.321002.ts.m3u8?ver=4";
-
         urls = video.getUrls();
         System.out.println("listUrl.size():" + listUrl.size());
         urls.add(new MySelfGSYVideoPlayer.GSYADVideoModel("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4",
@@ -210,11 +210,10 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
                 onBackPressed();
             }
         });
-
         //   videoPlayer.setImageAdUrl("http://www.baidu.com/");
-        video.setVideoAdUrl("http://xm.ganji.com/");
+       // video.setVideoAdUrl("http://xm.ganji.com/");
         //设置暂停图片广告的跳转地址
-        video.setPauseAdImageUrl("https://www.suning.com/");
+       // video.setPauseAdImageUrl("https://www.suning.com/");
         //点击暂停广告图片跳转
         video.getMadImageView().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,7 +249,7 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
 
         GSYVideoManager.instance().setOptionModelList(list);
         GSYVideoManager.instance().setTimeOut(4000, true);
-        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
+       PlayerFactory.setPlayManager(Exo2PlayerManager.class);
         System.out.println("urls:" + urls);
         video.setAdUp(urls,true,0);
         //   videoPlayer.setUp("http://v1.bjssmd.net/20190715/yXfbhmdr/index.m3u8",true,null,"");
@@ -351,6 +350,44 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
 
     }
 
+
+    public ArrayList<String> subString(String url){
+        ArrayList<String> list = new ArrayList<>();
+        String staticUrl = "";
+        String httpUrl = "";
+        if(url.startsWith("static")){
+            staticUrl = url.substring(url.indexOf("/")+1,url.indexOf("http"));
+        /*    String configRoot = contextFirst.getExternalFilesDir(null).getPath();
+            staticUrl = configRoot + staticUrl;*/
+            System.out.println("staticUrl:" +staticUrl);
+
+            if(!staticUrl.equals("")){
+                File file = new File(staticUrl);
+                if(file.exists()){
+                    list.add(staticUrl);
+                    httpUrl = url.substring(url.indexOf("http"),url.length());
+                    if(!httpUrl.equals("")){
+                        list.add(httpUrl);
+                    }
+                } else{
+                    httpUrl = url.substring(url.indexOf("http"),url.length());
+                    System.out.println("httpUrl:" + httpUrl);
+                    if(!httpUrl.equals("")){
+                        list.add(httpUrl);
+                    }
+                    System.out.println("文件不存在");
+                }
+
+            }
+        }
+        if(url.startsWith("http")){
+            list.add(url);
+        }
+
+
+        return list;
+    }
+
     public void displayAdImageStart(){
         Bitmap bmp = BitmapFactory.decodeResource(registrar.activity().getResources(),R.drawable.xxx1);;                     //bitmap图片对象
         int primaryWidth;               //原图片宽
@@ -377,56 +414,6 @@ public class VideoView  extends Activity implements PlatformView, MethodCallHand
         video.getSurface().setBackgroundDrawable(newBitmap);
     }
 
-    public void fullWindow(MySelfGSYVideoPlayer video){
-        Constructor<MySelfGSYVideoPlayer> constructor;
-        gsyVideoPlayer = video;
-
-
-        registrar.activity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        video.mSystemUiVisibility = (registrar.activity()).getWindow().getDecorView().getSystemUiVisibility();
-        video.getBackButton().setVisibility(View.VISIBLE);
-        CommonUtil.hideSupportActionBar(registrar.activity(),true,true);
-
-
-        /****************************/
-        MySelfGSYVideoPlayer video2 = new MySelfGSYVideoPlayer(context);
-
-
-        /***************************/
-
-
-
-        ViewGroup vp = video.getViewGroup();
-        video.removeVideo(vp, video.getFullId());
-
-        FrameLayout.LayoutParams lpParent = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundColor(Color.BLUE);
-
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(video.getWidth(), video.getHeight());
-        System.out.println("vide.getParent1:"+video.getParent());
-        video2 = video;
-      //  video.cloneParams(video,video2);
-
-        ViewGroup parent = (ViewGroup) video.getParent();
-        if (parent != null) {
-            parent.removeAllViews();
-        }
-        System.out.println("vide.getParent2:"+video.getParent());
-        //video.removeAllViews();
-        // frameLayout.addView(video2, lpParent);
-        try{
-            if(video.getParent() == null){
-                vp.addView(video, lpParent);
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-     /*   video.setVisibility(View.INVISIBLE);
-        frameLayout.setVisibility(View.INVISIBLE);*/
-
-    //    video.resolveFullVideoShow(registrar.activity(), video, frameLayout);
-    }
 
     //设置暂停图片的方法
     public void setPauseImage(){

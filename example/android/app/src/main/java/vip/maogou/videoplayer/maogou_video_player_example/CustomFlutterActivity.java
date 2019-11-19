@@ -147,9 +147,9 @@ public class CustomFlutterActivity extends AppCompatActivity implements FlutterV
         this.eventDelegate.onLowMemory();
     }
 
-    public void onConfigurationChanged(Configuration newConfig) {
+    /*public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         this.eventDelegate.onConfigurationChanged(newConfig);
-    }
+    }*/
 }
 
