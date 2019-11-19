@@ -94,17 +94,22 @@ public class VideoView implements PlatformView, MethodCallHandler {
     private void getMaogouVideo(String url, long seek) {
         orientationUtils = new OrientationUtils(registrar.activity(), video);
 
-        video.getBackButton().setVisibility(View.GONE);
-        video.getBackButton().setOnClickListener(new View.OnClickListener() {
+        video.getBackButton().setVisibility(View.VISIBLE);
+      /*  video.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("点击后退","点击后退");
+                //  videoPlayer.changeAdUIState();
+                System.out.println("点击返回");
                 if (orientationUtils != null) {
-                    orientationUtils.setEnable(false);
                     orientationUtils.backToProtVideo();
                 }
+                if (GSYVideoManager.backFromWindowFull(registrar.activity())) {
+                    return;
+                }
+                registrar.activity().onBackPressed();
+                // videoPlayer.getMadImageView().setLayoutParams(new RelativeLayout.LayoutParams(150,118));
             }
-        });
+        });*/
         video.setFullHideStatusBar(true);
         video.setFullHideActionBar(true);
 
@@ -166,7 +171,21 @@ public class VideoView implements PlatformView, MethodCallHandler {
         }).build(video);*/
 
 
-
+        video.getBackButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //  videoPlayer.changeAdUIState();
+                System.out.println("点击返回");
+                if (orientationUtils != null) {
+                    orientationUtils.backToProtVideo();
+                }
+                if (GSYVideoManager.backFromWindowFull(registrar.activity())) {
+                    return;
+                }
+                registrar.activity().onBackPressed();
+                // videoPlayer.getMadImageView().setLayoutParams(new RelativeLayout.LayoutParams(150,118));
+            }
+        });
 
         video.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
