@@ -3,6 +3,8 @@ package vip.maogou.videoplayer.maogou_video_player;
 import android.content.Context;
 import android.view.View;
 import android.view.LayoutInflater;
+
+import io.flutter.Log;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import static io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -96,6 +98,7 @@ public class VideoView implements PlatformView, MethodCallHandler {
         video.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("点击后退","点击后退");
                 if (orientationUtils != null) {
                     orientationUtils.setEnable(false);
                     orientationUtils.backToProtVideo();
